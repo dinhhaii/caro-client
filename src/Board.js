@@ -15,6 +15,7 @@ class Board extends React.Component {
     renderSquare(i) {
         return (
             <Square
+                isWinningMove={this.props.winnerSquares[i]}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)} />
         );
@@ -33,8 +34,7 @@ class Board extends React.Component {
         return rows;
     }
 
-    render() {
-
+    render() {        
         let status;
         const currentPlayer = parseInt(this.props.xIsNext ? 1 : 2);
         const currentTick = this.props.xIsNext ? 'X' : 'O';
@@ -42,13 +42,15 @@ class Board extends React.Component {
         const anotherPlayer = parseInt(!this.props.xIsNext ? 1 : 2);
         const anotherTick = !this.props.xIsNext ? 'X' : 'O';
 
+        const isEndedGame = !this.props.winnerSquares.every(element => element === null);
+
         if (!this.props.isEnded) {
             status = `Player ${currentPlayer}: ${currentTick}`;
         }
         
         return (
             <div>
-                <Modal show={this.props.isEnded} onHide={this.props.resetGame}>
+                <Modal show={isEndedGame}>
                     <Modal.Header closeButton>
                         <Modal.Title>Congratulation!</Modal.Title>
                     </Modal.Header>
@@ -57,7 +59,7 @@ class Board extends React.Component {
                     </Modal.Body>
                     <Modal.Footer>
                         <button className="btn btn-primary" onClick={this.props.resetGame}>Play Again?</button>
-                        <button className="btn btn-danger" onClick={this.props.resetGame}>Close</button>
+                        <button className="btn btn-danger" onClick={this.props.keepStateWinning} >Close</button>
                     </Modal.Footer>
                 </Modal>
 
@@ -67,6 +69,13 @@ class Board extends React.Component {
                         onClick={this.props.prevTurn}>
                         Previous
                     </button>
+
+                    <button
+                        className="btn btn-info dh-btn"
+                        onClick={this.props.nextTurn}>
+                        Next
+                    </button>
+
                     <button
                         className="btn btn-danger dh-btn"
                         onClick={this.props.resetGame}>

@@ -52,16 +52,30 @@ ol, ul {
   background-color: transparent;
   border: 1px solid white;
   float: left;
-  font-size: 24px;
+  font-size: 23px;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
+  line-height: 30px;
+  height: 30px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
   color: white;
-  width: 34px;
+  width: 30px;
+}
+
+.winning-move {
+  border: 1px solid black !important;
+  background-color: white;
+  color: black !important;
+}
+
+.red {
+  color:coral;
+}
+
+.blue {
+  color: cornflowerblue;
 }
 
 .square:focus {
