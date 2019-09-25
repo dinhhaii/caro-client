@@ -109,6 +109,7 @@ ol, ul {
 
 .dh-log-container {
   overflow-y: scroll;
-  height: 500px;
-  width: 320px;
+  border: 2px solid chocolate;
+  height: 750px;
+  width: 330px;
 }
