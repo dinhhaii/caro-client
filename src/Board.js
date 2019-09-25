@@ -15,6 +15,7 @@ class Board extends React.Component {
     renderSquare(i) {
         return (
             <Square
+                isCurrentMove={this.props.currentMove === i}
                 isWinningMove={this.props.winnerSquares[i]}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)} />

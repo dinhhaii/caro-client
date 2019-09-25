@@ -1,5 +1,6 @@
 import React from 'react';
 import Board from './Board';
+import Log from './Log';
 import './App.css';
 
 class App extends React.Component {
@@ -12,11 +13,45 @@ class App extends React.Component {
       history: [{
         squares: Array(this.WIDTH * this.HEIGHT).fill(null)
       }],
+      logMoves: [<Log step={0} onClick={() => this.jumpMove(0)}/>],
+      positions: [null],
       currentIndex: 0,
       xIsNext: true,
       isEnded: false,
       winnerSquares: Array(this.WIDTH * this.HEIGHT).fill(null)
     };
+  }
+
+  checkEqualToCurrentIndex = (i) => {
+    return this.state.currentIndex === i;
+  }
+
+  jumpMove = (i) => {
+        
+    this.updateState(i);
+
+    if (this.state.history.length !== 1) {
+      this.setState({
+        currentIndex: i,
+        xIsNext: !(i % 2),
+        isEnded: false,
+        winnerSquares: Array(this.WIDTH * this.HEIGHT).fill(null)
+      });
+    }
+  }
+
+  updateState = (i) => {
+    const selectedLogClassName = "btn-warning";
+    const unselectedLogClassName = "btn-dark";
+
+    this.refs.logs.children[this.state.currentIndex].classList.remove(selectedLogClassName);
+    this.refs.logs.children[this.state.currentIndex].classList.add(unselectedLogClassName);
+    this.refs.logs.children[i].classList.remove(unselectedLogClassName);
+    this.refs.logs.children[i].classList.add(selectedLogClassName);
+  }
+
+  renderLog = (i) => {
+    return (<Log step={i} isSelected={this.state.currentIndex !== i} onClick={() => this.jumpMove(i)}/>);
   }
 
   handleClick(i) {
@@ -25,14 +60,18 @@ class App extends React.Component {
       const currentIndex = this.state.currentIndex;
       const current = history[currentIndex];
       const squares = current.squares.slice();
+      const selectedLogClassName = "btn-warning";
+      const unselectedLogClassName = "btn-dark";
 
       if (squares[i] == null) {
+        this.refs.logs.children[this.state.currentIndex].classList.remove(selectedLogClassName);
+        this.refs.logs.children[this.state.currentIndex].classList.add(unselectedLogClassName);
         squares[i] = this.state.xIsNext ? 'X' : 'O';
 
         this.setState({
-          history: history.splice(0,currentIndex + 1).concat([{
-            squares: squares
-          }]),
+          history: history.splice(0,currentIndex + 1).concat([{squares: squares}]),
+          logMoves: this.state.logMoves.splice(0,currentIndex + 1).concat(this.renderLog(currentIndex + 1)),
+          positions: this.state.positions.splice(0,currentIndex + 1).concat(i),
           currentIndex: currentIndex + 1,
           xIsNext: !this.state.xIsNext,
         });
@@ -99,8 +138,9 @@ class App extends React.Component {
 
   prevTurn = () => {
     const currentIndex = this.state.currentIndex;
-
+    
     if(currentIndex > 0) {
+      this.updateState(this.state.currentIndex - 1);
       this.setState({
         currentIndex: currentIndex - 1,
         xIsNext: !this.state.xIsNext,
@@ -115,6 +155,7 @@ class App extends React.Component {
     const currentIndex = this.state.currentIndex;
 
     if(length > 1 && currentIndex < length - 1) {
+      this.updateState(this.state.currentIndex + 1);
       this.setState({
         currentIndex: currentIndex + 1,
         xIsNext: !this.state.xIsNext,
@@ -127,6 +168,8 @@ class App extends React.Component {
     if (this.state.history.length !== 1) {
       this.setState({
         history: this.state.history.slice(0, 1),
+        logMoves: this.state.logMoves.splice(0, 1),
+        positions: this.state.positions.splice(0, 1),
         currentIndex: 0,
         xIsNext: true,
         isEnded: false,
@@ -192,6 +235,7 @@ class App extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.currentIndex];
+    const currentMove = this.state.positions[this.state.currentIndex];
 
     return (
       <div className="App">
@@ -200,23 +244,31 @@ class App extends React.Component {
             <h3>BTCN03 - Caro</h3>
             <h4>Vũ Đình Hải - 1612167</h4>
           </div>
-
-          <div className="row pb-5 d-flex justify-content-center">
-            <div className="game">
-              <div className="game-board">
-                <Board
-                  squares={current.squares}
-                  winnerSquares={this.state.winnerSquares}
-                  onClick={(i) => this.handleClick(i)}
-                  xIsNext={this.state.xIsNext}
-                  isEnded={this.state.isEnded}
-                  resetGame={this.resetGame}
-                  prevTurn={this.prevTurn}
-                  nextTurn={this.nextTurn}
-                  keepStateWinning={this.keepStateWinning}/>
+          <div className="row">
+            <div className="col-3 col-7 pb-5 d-flex justify-content-end">
+              <div className="game">
+                <div className="game-board">
+                  <Board
+                    squares={current.squares}
+                    currentMove={currentMove}
+                    winnerSquares={this.state.winnerSquares}
+                    onClick={(i) => this.handleClick(i)}
+                    xIsNext={this.state.xIsNext}
+                    isEnded={this.state.isEnded}
+                    resetGame={this.resetGame}
+                    prevTurn={this.prevTurn}
+                    nextTurn={this.nextTurn}
+                    keepStateWinning={this.keepStateWinning} />
+                </div>
               </div>
             </div>
-          </div>
+
+            <div className="col-5">
+              <div className="d-flex justify-content-start flex-column dh-log-container" ref="logs">
+                {this.state.logMoves}
+              </div>              
+            </div>
+          </div>         
 
         </div>
       </div>

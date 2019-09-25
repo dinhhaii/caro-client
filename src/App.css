@@ -70,6 +70,10 @@ ol, ul {
   color: black !important;
 }
 
+.current-move {
+  background-color: yellow;
+}
+
 .red {
   color:coral;
 }
@@ -97,4 +101,14 @@ ol, ul {
 
 .dh-btn { 
   width: 100px;
+}
+
+.dh-btn-log {
+  width: 300px;
+}
+
+.dh-log-container {
+  overflow-y: scroll;
+  height: 500px;
+  width: 320px;
 }
