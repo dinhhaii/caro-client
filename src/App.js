@@ -1,19 +1,20 @@
-import React from 'react';
-import Board from './Board';
-import Log from './Log';
-import './App.css';
+import React from "react";
+import Board from "./Board";
+import Log from "./Log";
+import "./App.css";
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.WIDTH = 20;
     this.HEIGHT = 20;
     this.state = {
-      history: [{
-        squares: Array(this.WIDTH * this.HEIGHT).fill(null)
-      }],
-      logMoves: [<Log step={0} onClick={() => this.jumpMove(0)}/>],
+      history: [
+        {
+          squares: Array(this.WIDTH * this.HEIGHT).fill(null)
+        }
+      ],
+      logMoves: [<Log step={0} onClick={() => this.jumpMove(0)} />],
       positions: [null],
       currentIndex: 0,
       xIsNext: true,
@@ -22,12 +23,11 @@ class App extends React.Component {
     };
   }
 
-  checkEqualToCurrentIndex = (i) => {
+  checkEqualToCurrentIndex = i => {
     return this.state.currentIndex === i;
-  }
+  };
 
-  jumpMove = (i) => {
-        
+  jumpMove = i => {
     this.updateState(i);
 
     if (this.state.history.length !== 1) {
@@ -38,21 +38,31 @@ class App extends React.Component {
         winnerSquares: Array(this.WIDTH * this.HEIGHT).fill(null)
       });
     }
-  }
+  };
 
-  updateState = (i) => {
+  updateState = i => {
     const selectedLogClassName = "btn-warning";
     const unselectedLogClassName = "btn-dark";
 
-    this.refs.logs.children[this.state.currentIndex].classList.remove(selectedLogClassName);
-    this.refs.logs.children[this.state.currentIndex].classList.add(unselectedLogClassName);
+    this.refs.logs.children[this.state.currentIndex].classList.remove(
+      selectedLogClassName
+    );
+    this.refs.logs.children[this.state.currentIndex].classList.add(
+      unselectedLogClassName
+    );
     this.refs.logs.children[i].classList.remove(unselectedLogClassName);
     this.refs.logs.children[i].classList.add(selectedLogClassName);
-  }
+  };
 
-  renderLog = (i) => {
-    return (<Log step={i} isSelected={this.state.currentIndex !== i} onClick={() => this.jumpMove(i)}/>);
-  }
+  renderLog = i => {
+    return (
+      <Log
+        step={i}
+        isSelected={this.state.currentIndex !== i}
+        onClick={() => this.jumpMove(i)}
+      />
+    );
+  };
 
   handleClick(i) {
     if (!this.state.isEnded) {
@@ -64,16 +74,24 @@ class App extends React.Component {
       const unselectedLogClassName = "btn-dark";
 
       if (squares[i] == null) {
-        this.refs.logs.children[this.state.currentIndex].classList.remove(selectedLogClassName);
-        this.refs.logs.children[this.state.currentIndex].classList.add(unselectedLogClassName);
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        this.refs.logs.children[this.state.currentIndex].classList.remove(
+          selectedLogClassName
+        );
+        this.refs.logs.children[this.state.currentIndex].classList.add(
+          unselectedLogClassName
+        );
+        squares[i] = this.state.xIsNext ? "X" : "O";
 
         this.setState({
-          history: history.splice(0,currentIndex + 1).concat([{squares: squares}]),
-          logMoves: this.state.logMoves.splice(0,currentIndex + 1).concat(this.renderLog(currentIndex + 1)),
-          positions: this.state.positions.splice(0,currentIndex + 1).concat(i),
+          history: history
+            .splice(0, currentIndex + 1)
+            .concat([{ squares: squares }]),
+          logMoves: this.state.logMoves
+            .splice(0, currentIndex + 1)
+            .concat(this.renderLog(currentIndex + 1)),
+          positions: this.state.positions.splice(0, currentIndex + 1).concat(i),
           currentIndex: currentIndex + 1,
-          xIsNext: !this.state.xIsNext,
+          xIsNext: !this.state.xIsNext
         });
 
         const line = this.calculateWinner(squares, i);
@@ -82,7 +100,7 @@ class App extends React.Component {
           this.setState({
             winnerSquares: winnerLine,
             isEnded: true
-          })
+          });
           return;
         }
       }
@@ -102,67 +120,92 @@ class App extends React.Component {
       index_bottom: index + this.WIDTH,
       index_bottom_right: index + this.WIDTH + 1,
       index_left: index - 1,
-      index_right: index + 1,
-    }
-    
+      index_right: index + 1
+    };
+
     switch (line) {
       case 1:
         for (let i = 1; i <= 4; i++) {
-          if (tick === squares[pos.index_top]) { result[pos.index_top] = 1; pos.index_top -= this.WIDTH; }
-          if (tick === squares[pos.index_bottom]) { result[pos.index_bottom] = 1; pos.index_bottom += this.WIDTH; }
+          if (tick === squares[pos.index_top]) {
+            result[pos.index_top] = 1;
+            pos.index_top -= this.WIDTH;
+          }
+          if (tick === squares[pos.index_bottom]) {
+            result[pos.index_bottom] = 1;
+            pos.index_bottom += this.WIDTH;
+          }
         }
         break;
       case 2:
         for (let i = 1; i <= 4; i++) {
-          if (tick === squares[pos.index_left]) { result[pos.index_left] = 1; pos.index_left -= 1; }
-          if (tick === squares[pos.index_right]) { result[pos.index_right] = 1; pos.index_right += 1; }
+          if (tick === squares[pos.index_left]) {
+            result[pos.index_left] = 1;
+            pos.index_left -= 1;
+          }
+          if (tick === squares[pos.index_right]) {
+            result[pos.index_right] = 1;
+            pos.index_right += 1;
+          }
         }
         break;
       case 3:
         for (let i = 1; i <= 4; i++) {
-          if (tick === squares[pos.index_top_left]) { result[pos.index_top_left] = 1; pos.index_top_left -= this.WIDTH + 1; }
-          if (tick === squares[pos.index_bottom_right]) { result[pos.index_bottom_right] = 1; pos.index_bottom_right += this.WIDTH + 1; }
+          if (tick === squares[pos.index_top_left]) {
+            result[pos.index_top_left] = 1;
+            pos.index_top_left -= this.WIDTH + 1;
+          }
+          if (tick === squares[pos.index_bottom_right]) {
+            result[pos.index_bottom_right] = 1;
+            pos.index_bottom_right += this.WIDTH + 1;
+          }
         }
         break;
       case 4:
         for (let i = 1; i <= 4; i++) {
-          if (tick === squares[pos.index_top_right]) { result[pos.index_top_right] = 1; pos.index_top_right -= this.WIDTH - 1; }
-          if (tick === squares[pos.index_bottom_left]) { result[pos.index_bottom_left] = 1; pos.index_bottom_left += this.WIDTH - 1; }
+          if (tick === squares[pos.index_top_right]) {
+            result[pos.index_top_right] = 1;
+            pos.index_top_right -= this.WIDTH - 1;
+          }
+          if (tick === squares[pos.index_bottom_left]) {
+            result[pos.index_bottom_left] = 1;
+            pos.index_bottom_left += this.WIDTH - 1;
+          }
         }
         break;
-      default: break;
+      default:
+        break;
     }
 
     return result;
-  }
+  };
 
   prevTurn = () => {
     const currentIndex = this.state.currentIndex;
-    
-    if(currentIndex > 0) {
+
+    if (currentIndex > 0) {
       this.updateState(this.state.currentIndex - 1);
       this.setState({
         currentIndex: currentIndex - 1,
         xIsNext: !this.state.xIsNext,
         isEnded: false,
         winnerSquares: Array(this.WIDTH * this.HEIGHT).fill(null)
-      })
-    }    
-  }
+      });
+    }
+  };
 
   nextTurn = () => {
     const length = this.state.history.length;
     const currentIndex = this.state.currentIndex;
 
-    if(length > 1 && currentIndex < length - 1) {
+    if (length > 1 && currentIndex < length - 1) {
       this.updateState(this.state.currentIndex + 1);
       this.setState({
         currentIndex: currentIndex + 1,
         xIsNext: !this.state.xIsNext,
         isEnded: false
-      })
-    }    
-  }
+      });
+    }
+  };
 
   resetGame = () => {
     if (this.state.history.length !== 1) {
@@ -176,7 +219,7 @@ class App extends React.Component {
         winnerSquares: Array(this.WIDTH * this.HEIGHT).fill(null)
       });
     }
-  }
+  };
 
   keepStateWinning = () => {
     if (this.state.history.length !== 1) {
@@ -184,7 +227,7 @@ class App extends React.Component {
         winnerSquares: Array(this.WIDTH * this.HEIGHT).fill(null)
       });
     }
-  }
+  };
 
   calculateWinner = (squares, last_turn) => {
     const countMoves = 4;
@@ -205,32 +248,61 @@ class App extends React.Component {
       index_bottom: index + this.WIDTH,
       index_bottom_right: index + this.WIDTH + 1,
       index_left: index - 1,
-      index_right: index + 1,
-    }
+      index_right: index + 1
+    };
 
     for (var i = 1; i <= 5; i++) {
-      if (tick === squares[pos.index_top]) { pos.index_top -= this.WIDTH; horizontal += 1; }
-      if (tick === squares[pos.index_bottom]) { pos.index_bottom += this.WIDTH; horizontal += 1; }
+      if (tick === squares[pos.index_top]) {
+        pos.index_top -= this.WIDTH;
+        horizontal += 1;
+      }
+      if (tick === squares[pos.index_bottom]) {
+        pos.index_bottom += this.WIDTH;
+        horizontal += 1;
+      }
 
-      if (tick === squares[pos.index_top_right]) { pos.index_top_right -= this.WIDTH - 1; right_diagonal += 1; }
-      if (tick === squares[pos.index_bottom_left]) { pos.index_bottom_left += this.WIDTH - 1; right_diagonal += 1; }
+      if (tick === squares[pos.index_top_right]) {
+        pos.index_top_right -= this.WIDTH - 1;
+        right_diagonal += 1;
+      }
+      if (tick === squares[pos.index_bottom_left]) {
+        pos.index_bottom_left += this.WIDTH - 1;
+        right_diagonal += 1;
+      }
 
-      if (tick === squares[pos.index_top_left]) { pos.index_top_left -= this.WIDTH + 1; left_diagonal += 1; }
-      if (tick === squares[pos.index_bottom_right]) { pos.index_bottom_right += this.WIDTH + 1; left_diagonal += 1; }
+      if (tick === squares[pos.index_top_left]) {
+        pos.index_top_left -= this.WIDTH + 1;
+        left_diagonal += 1;
+      }
+      if (tick === squares[pos.index_bottom_right]) {
+        pos.index_bottom_right += this.WIDTH + 1;
+        left_diagonal += 1;
+      }
 
-      if (tick === squares[pos.index_left]) { pos.index_left -= 1; vertical += 1; }
-      if (tick === squares[pos.index_right]) { pos.index_right += 1; vertical += 1; }
+      if (tick === squares[pos.index_left]) {
+        pos.index_left -= 1;
+        vertical += 1;
+      }
+      if (tick === squares[pos.index_right]) {
+        pos.index_right += 1;
+        vertical += 1;
+      }
 
-      switch(countMoves) {
-        case horizontal: return 1;
-        case vertical: return 2;
-        case left_diagonal: return 3;
-        case right_diagonal: return 4;
-        default: break;
+      switch (countMoves) {
+        case horizontal:
+          return 1;
+        case vertical:
+          return 2;
+        case left_diagonal:
+          return 3;
+        case right_diagonal:
+          return 4;
+        default:
+          break;
       }
     }
     return null;
-  }
+  };
 
   render() {
     const history = this.state.history;
@@ -252,27 +324,29 @@ class App extends React.Component {
                     squares={current.squares}
                     currentMove={currentMove}
                     winnerSquares={this.state.winnerSquares}
-                    onClick={(i) => this.handleClick(i)}
+                    onClick={i => this.handleClick(i)}
                     xIsNext={this.state.xIsNext}
                     isEnded={this.state.isEnded}
                     resetGame={this.resetGame}
                     prevTurn={this.prevTurn}
                     nextTurn={this.nextTurn}
-                    keepStateWinning={this.keepStateWinning} />
+                    keepStateWinning={this.keepStateWinning}
+                  />
                 </div>
               </div>
             </div>
 
             <div className="col-5">
-              <div className="d-flex justify-content-start flex-column dh-log-container" ref="logs">
+              <div
+                className="d-flex justify-content-start flex-column dh-log-container"
+                ref="logs"
+              >
                 {this.state.logMoves}
-              </div>              
+              </div>
             </div>
-          </div>         
-
+          </div>
         </div>
       </div>
-
     );
   }
 }
