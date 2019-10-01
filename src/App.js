@@ -14,7 +14,7 @@ class App extends React.Component {
           squares: Array(this.WIDTH * this.HEIGHT).fill(null)
         }
       ],
-      logMoves: [<Log step={0} onClick={() => this.jumpMove(0)} />],
+      logMoves: [<Log key="0" step={0} onClick={() => this.jumpMove(0)} />],
       positions: [null],
       currentIndex: 0,
       xIsNext: true,
@@ -57,6 +57,7 @@ class App extends React.Component {
   renderLog = i => {
     return (
       <Log
+        key={i.toString()}
         step={i}
         isSelected={this.state.currentIndex !== i}
         onClick={() => this.jumpMove(i)}

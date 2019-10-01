@@ -10,11 +10,14 @@ class Board extends React.Component {
     this.state = {
       value: null
     };
+
+    this.createBoardRow = this.createBoardRow.bind(this);
   }
 
   renderSquare(i) {
     return (
       <Square
+        key={i.toString()}
         isCurrentMove={this.props.currentMove === i}
         isWinningMove={this.props.winnerSquares[i]}
         value={this.props.squares[i]}
@@ -26,12 +29,18 @@ class Board extends React.Component {
   createBoardRow = () => {
     var rows = [];
     var childrens = [];
+    var count = 0;
     for (var i = 0; i < this.WIDTH * this.HEIGHT; i++) {
       childrens.push(this.renderSquare(i));
       if ((i + 1) % this.WIDTH === 0) {
         rows.push(
-          React.createElement("div", { className: "board-row" }, childrens)
+          React.createElement(
+            "div",
+            { className: "board-row", key: `${count.toString()}` },
+            childrens
+          )
         );
+        count++;
         childrens = [];
       }
     }
