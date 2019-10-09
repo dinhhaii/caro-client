@@ -3,6 +3,7 @@ import Board from "../components/Board/Board";
 import Log from "../components/Log/Log";
 import { connect } from "react-redux";
 import "./App.css";
+import * as actionTypes from "../actions/actions";
 
 class App extends Component {
   render() {
@@ -85,17 +86,17 @@ const mapDispatchToProps = dispatch => {
   return {
     onChooseAMove: (index, logs, renderLog) =>
       dispatch({
-        type: "CHOOSE_MOVE",
+        type: actionTypes.CHOOSE_MOVE,
         index: index,
         logs: logs,
         renderLog: renderLog
       }),
-    prevTurn: logs => dispatch({ type: "PREVIOUS_TURN", logs: logs }),
-    nextTurn: logs => dispatch({ type: "NEXT_TURN", logs: logs }),
-    resetGame: () => dispatch({ type: "RESET_GAME" }),
-    keepStateWinning: () => dispatch({ type: "KEEP_STATE_WINNING" }),
+    prevTurn: logs => dispatch({ type: actionTypes.PREVIOUS_TURN, logs: logs }),
+    nextTurn: logs => dispatch({ type: actionTypes.NEXT_TURN, logs: logs }),
+    resetGame: () => dispatch({ type: actionTypes.RESET_GAME }),
+    keepStateWinning: () => dispatch({ type: actionTypes.KEEP_STATE_WINNING }),
     jumpMove: (index, logs) =>
-      dispatch({ type: "JUMP_MOVE", index: index, logs: logs })
+      dispatch({ type: actionTypes.JUMP_MOVE, index: index, logs: logs })
   };
 };
 

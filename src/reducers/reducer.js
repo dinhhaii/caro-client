@@ -1,4 +1,4 @@
-// import * as actionTypes from "../actions/actions";
+import * as actionTypes from "../actions/actions";
 import React from "react";
 import Log from "../components/Log/Log";
 
@@ -24,7 +24,7 @@ const reducer = (state = initialState, action) => {
   const currentIndex = state.currentIndex;
 
   switch (action.type) {
-    case "CHOOSE_MOVE":
+    case actionTypes.CHOOSE_MOVE:
       if (!state.isEnded) {
         const history = state.history.slice();
         const currentIndex = state.currentIndex;
@@ -70,7 +70,7 @@ const reducer = (state = initialState, action) => {
         }
       }
       break;
-    case "PREVIOUS_TURN":
+    case actionTypes.PREVIOUS_TURN:
       if (currentIndex > 0) {
         updateState(state.currentIndex - 1, state.currentIndex, action.logs);
         return {
@@ -82,7 +82,7 @@ const reducer = (state = initialState, action) => {
         };
       }
       break;
-    case "NEXT_TURN":
+    case actionTypes.NEXT_TURN:
       if (length > 1 && currentIndex < length - 1) {
         updateState(state.currentIndex + 1, state.currentIndex, action.logs);
         return {
@@ -93,7 +93,7 @@ const reducer = (state = initialState, action) => {
         };
       }
       break;
-    case "RESET_GAME":
+    case actionTypes.RESET_GAME:
       if (state.history.length !== 1) {
         return {
           ...state,
@@ -107,7 +107,7 @@ const reducer = (state = initialState, action) => {
         };
       }
       break;
-    case "KEEP_STATE_WINNING":
+    case actionTypes.KEEP_STATE_WINNING:
       if (state.history.length !== 1) {
         return {
           ...state,
@@ -115,7 +115,7 @@ const reducer = (state = initialState, action) => {
         };
       }
       break;
-    case "JUMP_MOVE":
+    case actionTypes.JUMP_MOVE:
       updateState(action.index, state.currentIndex, action.logs);
       if (state.history.length !== 1) {
         return {
