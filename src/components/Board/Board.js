@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import Square from "./Square";
+import Square from "../Square/Square";
 
 class Board extends React.Component {
   constructor(props) {
