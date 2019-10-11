@@ -26,13 +26,7 @@ class App extends Component {
                     squares={current.squares}
                     currentMove={currentMove}
                     winnerSquares={this.props.winnerSquares}
-                    onClick={i =>
-                      this.props.onChooseAMove(
-                        i,
-                        this.refs.logs,
-                        this.renderLog
-                      )
-                    }
+                    onClick={i => this.props.onChooseAMove(i, this.refs.logs)}
                     xIsNext={this.props.xIsNext}
                     isEnded={this.props.isEnded}
                     resetGame={this.props.resetGame}
@@ -49,7 +43,9 @@ class App extends Component {
                 className="d-flex justify-content-start flex-column dh-log-container"
                 ref="logs"
               >
-                {this.props.logMoves}
+                {this.props.history.map((value, index) => {
+                  return this.renderLog(index);
+                })}
               </div>
             </div>
           </div>
@@ -84,12 +80,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onChooseAMove: (index, logs, renderLog) =>
+    onChooseAMove: (index, logs) =>
       dispatch({
         type: actionTypes.CHOOSE_MOVE,
         index: index,
-        logs: logs,
-        renderLog: renderLog
+        logs: logs
       }),
     prevTurn: logs => dispatch({ type: actionTypes.PREVIOUS_TURN, logs: logs }),
     nextTurn: logs => dispatch({ type: actionTypes.NEXT_TURN, logs: logs }),

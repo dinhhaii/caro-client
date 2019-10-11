@@ -1,6 +1,4 @@
 import * as actionTypes from "../actions/actions";
-import React from "react";
-import Log from "../components/Log/Log";
 
 const WIDTH = 20;
 const HEIGHT = 20;
@@ -11,7 +9,6 @@ const initialState = {
       squares: Array(WIDTH * HEIGHT).fill(null)
     }
   ],
-  logMoves: [<Log key={0} step={0} isSelected={1} />],
   positions: [null],
   currentIndex: 0,
   xIsNext: true,
@@ -47,9 +44,6 @@ const reducer = (state = initialState, action) => {
             history: history
               .splice(0, currentIndex + 1)
               .concat([{ squares: squares }]),
-            logMoves: state.logMoves
-              .splice(0, currentIndex + 1)
-              .concat(action.renderLog(currentIndex + 1)),
             positions: state.positions
               .splice(0, currentIndex + 1)
               .concat(action.index),
@@ -98,7 +92,6 @@ const reducer = (state = initialState, action) => {
         return {
           ...state,
           history: state.history.slice(0, 1),
-          logMoves: state.logMoves.splice(0, 1),
           positions: state.positions.splice(0, 1),
           currentIndex: 0,
           xIsNext: true,
@@ -242,7 +235,7 @@ const calculateWinner = (squares, last_turn) => {
     index_right: index + 1
   };
 
-  for (var i = 1; i <= 5; i++) {
+  for (var i = 1; i <= 4; i++) {
     if (tick === squares[pos.index_top]) {
       pos.index_top -= WIDTH;
       horizontal += 1;
