@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import Board from "../components/Board/Board";
 import Log from "../components/Log/Log";
 import { connect } from "react-redux";
-import "./App.css";
-import * as actionTypes from "../actions/actions";
+import * as actionTypes from "../actions/actionType";
 
-class App extends Component {
+class Game extends Component {
   render() {
     const history = this.props.history.slice();
     const current = history[this.props.currentIndex];
@@ -98,4 +97,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(App);
+)(Game);

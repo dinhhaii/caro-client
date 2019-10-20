@@ -1,4 +1,4 @@
-import * as actionTypes from "../actions/actions";
+import * as actionTypes from "../actions/actionType";
 
 const WIDTH = 20;
 const HEIGHT = 20;
