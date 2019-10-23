@@ -7940,3 +7940,23 @@ iframe {
   right: 0px;
   bottom: 0px;
 }
+
+.google-btn {
+  background-color: orangered !important;
+}
+
+.facebook-btn {
+  background-color: royalblue !important;
+}
+
+.lbl-input {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+hr {
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #666;
+}

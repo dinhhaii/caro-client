@@ -8,22 +8,22 @@ const routes = [
   {
     path: "/",
     exact: true,
-    main: () => <CaroPage></CaroPage>
+    main: () => <CaroPage />
   },
   {
     path: "/login",
     exact: false,
-    main: () => <LoginPage></LoginPage>
+    main: () => <LoginPage />
   },
   {
     path: "/register",
     exact: false,
-    main: () => <RegisterPage></RegisterPage>
+    main: () => <RegisterPage />
   },
   {
     path: "",
     exact: false,
-    main: () => <NotFoundPage></NotFoundPage>
+    main: () => <NotFoundPage />
   }
 ];
 

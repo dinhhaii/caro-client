@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Board from "../components/Board/Board";
 import Log from "../components/Log/Log";
+import Menu from "../components/Menu/Menu";
 import { connect } from "react-redux";
 import * as actionTypes from "../actions/actionType";
 
@@ -12,11 +13,8 @@ class Game extends Component {
 
     return (
       <div className="App">
+        <Menu></Menu>
         <div className="container-fluid pt-5 bg-dark">
-          <div className="row mb-5 d-flex flex-column">
-            <h3>Caro</h3>
-            <h4>Vũ Đình Hải - 1612167</h4>
-          </div>
           <div className="row">
             <div className="col-3 col-7 pb-5 d-flex justify-content-end">
               <div className="game">
@@ -67,13 +65,13 @@ class Game extends Component {
 
 const mapStateToProps = state => {
   return {
-    history: state.reducer.history,
-    logMoves: state.reducer.logMoves,
-    positions: state.reducer.positions,
-    currentIndex: state.reducer.currentIndex,
-    xIsNext: state.reducer.xIsNext,
-    isEnded: state.reducer.isEnded,
-    winnerSquares: state.reducer.winnerSquares
+    history: state.games.history,
+    logMoves: state.games.logMoves,
+    positions: state.games.positions,
+    currentIndex: state.games.currentIndex,
+    xIsNext: state.games.xIsNext,
+    isEnded: state.games.isEnded,
+    winnerSquares: state.games.winnerSquares
   };
 };
 

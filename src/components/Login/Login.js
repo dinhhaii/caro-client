@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import "./Login.css";
-
+import Menu from "../Menu/Menu";
 class Login extends Component {
   render() {
     return (
       <div className="limiter">
+        <Menu></Menu>
         <div className="container-login100 bg-dark">
           <div className="wrap-login100">
             <form className="login100-form validate-form p-l-55 p-r-55 p-t-178">
