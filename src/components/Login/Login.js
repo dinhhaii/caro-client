@@ -1,14 +1,39 @@
 import React, { Component } from "react";
 import "./Login.css";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { loginUser } from "../../actions/actions";
 import Menu from "../Menu/Menu";
+import * as actionType from "../../actions/actionType";
+
 class Login extends Component {
+  onChange = e => {
+    var target = e.target;
+    var name = target.name;
+    var value = target.value;
+    if (value !== "") {
+      this.props.setUser(name, value);
+    }
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    var user = this.props;
+    this.props.loginUser(user);
+    this.props.history.push("/");
+  };
+
   render() {
+    var { username, password } = this.props;
     return (
       <div className="limiter">
         <Menu></Menu>
         <div className="container-login100 bg-dark">
           <div className="wrap-login100">
-            <form className="login100-form validate-form p-l-55 p-r-55 p-t-178">
+            <form
+              className="login100-form validate-form p-l-55 p-r-55 p-t-178"
+              onSubmit={this.onSubmit}
+            >
               <span className="login100-form-title">Sign In</span>
 
               <div
@@ -19,6 +44,8 @@ class Login extends Component {
                   className="input100"
                   type="text"
                   name="username"
+                  value={username}
+                  onChange={this.onChange}
                   placeholder="Username/Email"
                 ></input>
                 <span className="focus-input100"></span>
@@ -32,6 +59,8 @@ class Login extends Component {
                   className="input100"
                   type="password"
                   name="password"
+                  value={password}
+                  onChange={this.onChange}
                   placeholder="Password"
                 ></input>
                 <span className="focus-input100"></span>
@@ -43,7 +72,9 @@ class Login extends Component {
               </div>
 
               <div className="container-login100-form-btn">
-                <button className="login100-form-btn">Sign in</button>
+                <button className="login100-form-btn" type="submit">
+                  Sign in
+                </button>
                 <button className="login100-form-btn google-btn">Google</button>
                 <button className="login100-form-btn facebook-btn">
                   Facebook
@@ -63,4 +94,22 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    username: state.users.username,
+    password: state.users.password
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loginUser: user => dispatch(loginUser(user)),
+    setUser: (name, value) =>
+      dispatch({ type: actionType.SET_USER, name: name, value: value })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Login));

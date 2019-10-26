@@ -1,9 +1,36 @@
 import React, { Component } from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 class Menu extends Component {
+  showLogInContent = () => {
+    var { name, isLogin } = this.props;
+
+    if (isLogin) {
+      return (
+        <div>
+          <button className="mr-3"> {name} </button>
+          <button className="btn btn-outline-danger">LOGOUT</button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Link className="btn btn-primary mr-3" to="/login">
+            LOGIN
+          </Link>
+          <Link className="btn btn-success mr-3" to="/register">
+            REGISTER
+          </Link>
+        </div>
+      );
+    }
+  };
+
   render() {
+    var { name, isLogin } = this.props;
+
     return (
       <Navbar bg="light" expand="lg">
         <Navbar.Brand>
@@ -29,21 +56,38 @@ class Menu extends Component {
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
-        <div>
-          <button className="mr-3">Username</button>
-
-          <Link className="btn btn-primary mr-3" to="/login">
-            LOGIN
-          </Link>
-
-          <Link className="btn btn-success mr-3" to="/register">
-            REGISTER
-          </Link>
-          <button className="btn btn-outline-danger">LOGOUT</button>
-        </div>
+        {isLogin ? (
+          <div>
+            <button className="mr-3"> {name} </button>
+            <button className="btn btn-outline-danger">LOGOUT</button>
+          </div>
+        ) : (
+          <div>
+            <Link className="btn btn-primary mr-3" to="/login">
+              LOGIN
+            </Link>
+            <Link className="btn btn-success mr-3" to="/register">
+              REGISTER
+            </Link>
+          </div>
+        )}
       </Navbar>
     );
   }
 }
 
-export default Menu;
+const mapStateToProps = state => {
+  return {
+    isLogin: state.users.isLogin,
+    name: state.users.name
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Menu);

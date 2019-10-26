@@ -1,38 +1,28 @@
 import React, { Component } from "react";
 import "./Register.css";
 import { connect } from "react-redux";
-import { fetchUser } from "../../actions/actions";
+import { registerUser } from "../../actions/actions";
 import Menu from "../Menu/Menu";
+import * as actionType from "../../actions/actionType";
 
 class Register extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      gender: "",
-      name: ""
-    };
-  }
-
   onChange = e => {
     var target = e.target;
     var name = target.name;
     var value = target.value;
     if (value !== "") {
-      this.setState({
-        [name]: value
-      });
+      this.props.setUser(name, value);
     }
   };
 
   onSubmit = e => {
     e.preventDefault();
-    var user = this.state;
-    this.props.getUser(user);
+    var user = this.props;
+    this.props.register(user);
   };
 
   render() {
+    var { username, password, name, gender } = this.props;
     return (
       <div className="limiter">
         <Menu></Menu>
@@ -40,8 +30,6 @@ class Register extends Component {
           <div className="wrap-login100">
             <form
               className="login100-form validate-form p-l-55 p-r-55 p-t-178"
-              // method="POST"
-              // action="http://localhost:3000/user/register"
               onSubmit={this.onSubmit}
             >
               <span className="login100-form-title">Register account</span>
@@ -55,7 +43,9 @@ class Register extends Component {
                   className="input100"
                   type="text"
                   name="name"
+                  value={name}
                   onChange={this.onChange}
+                  disabled={this.props.loading}
                 ></input>
                 <span className="focus-input100"></span>
               </div>
@@ -67,8 +57,9 @@ class Register extends Component {
                   className="mr-2"
                   type="radio"
                   name="gender"
-                  value="male"
+                  value={gender}
                   onChange={this.onChange}
+                  disabled={this.props.loading}
                   checked="checked"
                 ></input>
                 <label className="mr-2">Female</label>
@@ -78,6 +69,7 @@ class Register extends Component {
                   name="gender"
                   value="female"
                   onChange={this.onChange}
+                  disabled={this.props.loading}
                 ></input>
               </div>
               {/* Username/Email */}
@@ -90,7 +82,9 @@ class Register extends Component {
                   className="input100"
                   type="text"
                   name="username"
+                  value={username}
                   onChange={this.onChange}
+                  disabled={this.props.loading}
                 ></input>
                 <span className="focus-input100"></span>
               </div>
@@ -104,18 +98,32 @@ class Register extends Component {
                   className="input100"
                   type="password"
                   name="password"
+                  value={password}
                   onChange={this.onChange}
+                  disabled={this.props.loading}
                 ></input>
                 <span className="focus-input100"></span>
               </div>
 
               <div className="container-login100-form-btn">
-                <button className="login100-form-btn" type="submit">
+                <button
+                  className="login100-form-btn"
+                  type="submit"
+                  disabled={this.props.loading}
+                >
                   Register
                 </button>
                 <hr></hr>
-                <button className="login100-form-btn google-btn">Google</button>
-                <button className="login100-form-btn facebook-btn">
+                <button
+                  className="login100-form-btn google-btn"
+                  disabled={this.props.loading}
+                >
+                  Google
+                </button>
+                <button
+                  className="login100-form-btn facebook-btn"
+                  disabled={this.props.loading}
+                >
                   Facebook
                 </button>
               </div>
@@ -129,15 +137,20 @@ class Register extends Component {
 
 const mapStateToProps = state => {
   return {
+    loading: state.users.loading,
     username: state.users.username,
     password: state.users.password,
-    gender: state.users.gender,
-    name: state.users.name
+    name: state.users.name,
+    gender: state.users.gender
   };
 };
 
-const mapDispatchToProps = {
-  getUser: fetchUser
+const mapDispatchToProps = dispatch => {
+  return {
+    register: user => dispatch(registerUser(user)),
+    setUser: (name, value) =>
+      dispatch({ type: actionType.SET_USER, name: name, value: value })
+  };
 };
 
 export default connect(

@@ -3,10 +3,12 @@ import * as actionType from "../actions/actionType";
 
 const initialState = {
   name: "",
-  gender: "",
+  gender: "male",
   username: "",
   password: "",
-  loading: false
+  loading: false,
+  success: false,
+  isLogin: false
 };
 
 const user = (state = initialState, action) => {
@@ -23,12 +25,22 @@ const user = (state = initialState, action) => {
       };
     case actionType.REQUEST_USER:
       return { ...state, loading: true };
-    case actionType.RECIEVE_USER:
+    case actionType.RECEIVE_USER:
+      console.log(action.user);
       return {
         ...state,
+        username: action.user.username,
+        gender: action.user.gender,
+        name: action.user.name,
         loading: false,
-        username: action.user.username
+        success: true
       };
+    case actionType.RESET_USER:
+      return { ...initialState };
+    case actionType.SET_USER:
+      return { ...state, [action.name]: action.value };
+    case actionType.IS_LOGIN_USER:
+      return { ...state, isLogin: true };
     default:
       return state;
   }

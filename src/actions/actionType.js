@@ -7,4 +7,7 @@ export const JUMP_MOVE = "JUMP_MOVE";
 
 export const GET_USER = "GET_USER";
 export const REQUEST_USER = "REQUEST_USER";
-export const RECIEVE_USER = "UPDATE_ACCOUNT";
+export const RECEIVE_USER = "RECEIVE_USER";
+export const RESET_USER = "RESET_USER";
+export const SET_USER = "SET_USER";
+export const IS_LOGIN_USER = "IS_LOGIN_USER";
