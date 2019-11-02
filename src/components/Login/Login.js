@@ -3,7 +3,6 @@ import "./Login.css";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { loginUser } from "../../actions/actions";
-import Menu from "../Menu/Menu";
 import * as actionType from "../../actions/actionType";
 
 class Login extends Component {
@@ -19,15 +18,14 @@ class Login extends Component {
   onSubmit = e => {
     e.preventDefault();
     var user = this.props;
-    this.props.loginUser(user);
+    this.props.login(user);
     this.props.history.push("/");
   };
 
   render() {
-    var { username, password } = this.props;
+    // var { username, password } = this.props;
     return (
       <div className="limiter">
-        <Menu></Menu>
         <div className="container-login100 bg-dark">
           <div className="wrap-login100">
             <form
@@ -44,7 +42,6 @@ class Login extends Component {
                   className="input100"
                   type="text"
                   name="username"
-                  value={username}
                   onChange={this.onChange}
                   placeholder="Username/Email"
                 ></input>
@@ -59,7 +56,6 @@ class Login extends Component {
                   className="input100"
                   type="password"
                   name="password"
-                  value={password}
                   onChange={this.onChange}
                   placeholder="Password"
                 ></input>
@@ -103,9 +99,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginUser: user => dispatch(loginUser(user)),
+    login: user => dispatch(loginUser(user)),
     setUser: (name, value) =>
-      dispatch({ type: actionType.SET_USER, name: name, value: value })
+      dispatch({ type: actionType.SET_INFO_USER, name: name, value: value })
   };
 };
 

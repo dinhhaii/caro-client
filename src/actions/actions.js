@@ -27,7 +27,8 @@ export function registerUser(user) {
       name: name
     })
       .then(res => {
-        dispatch(receiveUser(res));
+        console.log(res);
+        dispatch(receiveUser(res.data));
       })
       .catch(err => console.log(err));
   };

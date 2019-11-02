@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import routes from "./routes/index";
+import Menu from "./components/Menu/Menu";
 import "./App.css";
 
 class App extends Component {
@@ -22,7 +23,12 @@ class App extends Component {
         );
       });
     }
-    return <Switch>{result}</Switch>;
+    return (
+      <div>
+        <Menu></Menu>
+        <Switch>{result}</Switch>
+      </div>
+    );
   };
 }
 

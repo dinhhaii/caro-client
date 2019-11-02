@@ -1,29 +1,29 @@
 import React from "react";
-import CaroPage from "../pages/CaroPage/CaroPage";
-import LoginPage from "../pages/LoginPage/LoginPage";
-import RegisterPage from "../pages/RegisterPage/RegisterPage";
-import NotFoundPage from "../pages/NotfoundPage/NotFoundPage";
+import NotFound from "../components/NotFound/NotFound";
+import Register from "../components/Register/Register";
+import Login from "../components/Login/Login";
+import Game from "../containers/Game";
 
 const routes = [
   {
     path: "/",
     exact: true,
-    main: () => <CaroPage />
+    main: () => <Game />
   },
   {
     path: "/login",
     exact: false,
-    main: () => <LoginPage />
+    main: () => <Login />
   },
   {
     path: "/register",
     exact: false,
-    main: () => <RegisterPage />
+    main: () => <Register />
   },
   {
     path: "",
     exact: false,
-    main: () => <NotFoundPage />
+    main: () => <NotFound />
   }
 ];
 

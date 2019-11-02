@@ -26,7 +26,7 @@ const user = (state = initialState, action) => {
     case actionType.REQUEST_USER:
       return { ...state, loading: true };
     case actionType.RECEIVE_USER:
-      console.log(action.user);
+      console.log(action.user.username);
       return {
         ...state,
         username: action.user.username,
@@ -37,7 +37,7 @@ const user = (state = initialState, action) => {
       };
     case actionType.RESET_USER:
       return { ...initialState };
-    case actionType.SET_USER:
+    case actionType.SET_INFO_USER:
       return { ...state, [action.name]: action.value };
     case actionType.IS_LOGIN_USER:
       return { ...state, isLogin: true };

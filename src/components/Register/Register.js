@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import { Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
 import "./Register.css";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/actions";
-import Menu from "../Menu/Menu";
 import * as actionType from "../../actions/actionType";
 
 class Register extends Component {
@@ -22,10 +24,31 @@ class Register extends Component {
   };
 
   render() {
-    var { username, password, name, gender } = this.props;
+    var { name, success } = this.props;
     return (
       <div className="limiter">
-        <Menu></Menu>
+        <Modal show={success}>
+          <Modal.Header closeButton>
+            <Modal.Title>Notification</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Hi <b>{name}</b>, congratulation on your successful registration!
+          </Modal.Body>
+          <Modal.Footer>
+            <button className="btn btn-primary" onClick={this.props.resetUser}>
+              OK
+            </button>
+            <Link to="/login">
+              <button
+                className="btn btn-warning"
+                onClick={this.props.resetUser}
+              >
+                Go to Login
+              </button>
+            </Link>
+          </Modal.Footer>
+        </Modal>
+
         <div className="container-login100 bg-dark">
           <div className="wrap-login100">
             <form
@@ -43,7 +66,6 @@ class Register extends Component {
                   className="input100"
                   type="text"
                   name="name"
-                  value={name}
                   onChange={this.onChange}
                   disabled={this.props.loading}
                 ></input>
@@ -57,7 +79,6 @@ class Register extends Component {
                   className="mr-2"
                   type="radio"
                   name="gender"
-                  value={gender}
                   onChange={this.onChange}
                   disabled={this.props.loading}
                   checked="checked"
@@ -82,7 +103,6 @@ class Register extends Component {
                   className="input100"
                   type="text"
                   name="username"
-                  value={username}
                   onChange={this.onChange}
                   disabled={this.props.loading}
                 ></input>
@@ -98,7 +118,6 @@ class Register extends Component {
                   className="input100"
                   type="password"
                   name="password"
-                  value={password}
                   onChange={this.onChange}
                   disabled={this.props.loading}
                 ></input>
@@ -141,15 +160,17 @@ const mapStateToProps = state => {
     username: state.users.username,
     password: state.users.password,
     name: state.users.name,
-    gender: state.users.gender
+    gender: state.users.gender,
+    success: state.users.success
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     register: user => dispatch(registerUser(user)),
+    resetUser: () => dispatch({ type: actionType.RESET_USER }),
     setUser: (name, value) =>
-      dispatch({ type: actionType.SET_USER, name: name, value: value })
+      dispatch({ type: actionType.SET_INFO_USER, name: name, value: value })
   };
 };
 
