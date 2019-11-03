@@ -11,3 +11,4 @@ export const RECEIVE_USER = "RECEIVE_USER";
 export const RESET_USER = "RESET_USER";
 export const SET_INFO_USER = "SET_INFO_USER";
 export const IS_LOGIN_USER = "IS_LOGIN_USER";
+export const LOGOUT_USER = "LOGOUT_USER";

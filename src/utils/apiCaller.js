@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = "http://localhost:3000";
+import { API_URL } from "./constants";
 
 export default function callAPI(endpoint, method = "GET", body) {
   return axios({

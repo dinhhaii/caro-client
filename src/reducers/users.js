@@ -6,6 +6,7 @@ const initialState = {
   gender: "male",
   username: "",
   password: "",
+  picture: "",
   loading: false,
   success: false,
   isLogin: false

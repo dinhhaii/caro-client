@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { loginUser } from "../../actions/actions";
 import * as actionType from "../../actions/actionType";
+import * as constant from "../../utils/constants";
 
 class Login extends Component {
   onChange = e => {
@@ -22,7 +23,10 @@ class Login extends Component {
   };
 
   render() {
-    // var { username, password } = this.props;
+    const data_user = localStorage.getItem(constant.TOKEN_USER);
+    if (data_user && this.props.isLogin) {
+      return <Redirect to="/"></Redirect>;
+    }
     return (
       <div className="limiter">
         <div className="container-login100 bg-dark">
@@ -92,7 +96,8 @@ class Login extends Component {
 const mapStateToProps = state => {
   return {
     username: state.users.username,
-    password: state.users.password
+    password: state.users.password,
+    isLogin: state.users.isLogin
   };
 };
 

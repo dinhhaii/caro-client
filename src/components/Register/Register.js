@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import "./Register.css";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/actions";
 import * as actionType from "../../actions/actionType";
+import * as constant from "../../utils/constants";
 
 class Register extends Component {
   onChange = e => {
@@ -24,7 +25,11 @@ class Register extends Component {
   };
 
   render() {
-    var { name, success } = this.props;
+    var { name, success, isLogin } = this.props;
+    const data_user = localStorage.getItem(constant.TOKEN_USER);
+    if (data_user && isLogin) {
+      return <Redirect to="/"></Redirect>;
+    }
     return (
       <div className="limiter">
         <Modal show={success}>
@@ -161,7 +166,8 @@ const mapStateToProps = state => {
     password: state.users.password,
     name: state.users.name,
     gender: state.users.gender,
-    success: state.users.success
+    success: state.users.success,
+    isLogin: state.users.isLogin
   };
 };
 
