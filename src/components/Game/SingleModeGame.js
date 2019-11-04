@@ -3,11 +3,27 @@ import Board from "../Board/Board";
 import Log from "../Log/Log";
 import { connect } from "react-redux";
 import * as actionTypes from "../../actions/actionType";
+import {
+  calculateMoveOfUser,
+  findComputerMove
+} from "../../reducers/shared/caro-game";
 
-class Game extends Component {
+class SingleModeGame extends Component {
   componentWillMount() {
     this.props.resetGame();
   }
+
+  computerChooseMove = i => {
+    this.props.chooseMove(i, this.refs.logs);
+
+    const squares = this.props.history[this.props.currentIndex].squares.slice();
+    squares[i] = "X";
+
+    const lineInfo = calculateMoveOfUser(squares, i);
+    const newIndex = findComputerMove(squares, i, lineInfo);
+
+    this.props.computerChooseMove(newIndex, this.refs.logs);
+  };
 
   render() {
     const history = this.props.history.slice();
@@ -25,7 +41,7 @@ class Game extends Component {
                     squares={current.squares}
                     currentMove={currentMove}
                     winnerSquares={this.props.winnerSquares}
-                    onClick={i => this.props.onChooseAMove(i, this.refs.logs)}
+                    onClick={this.computerChooseMove}
                     xIsNext={this.props.xIsNext}
                     isEnded={this.props.isEnded}
                     resetGame={this.props.resetGame}
@@ -79,9 +95,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onChooseAMove: (index, logs) =>
+    chooseMove: (index, logs) =>
       dispatch({
         type: actionTypes.CHOOSE_MOVE,
+        index: index,
+        logs: logs
+      }),
+    computerChooseMove: (index, logs) =>
+      dispatch({
+        type: actionTypes.COMPUTER_CHOOSE_MOVE,
         index: index,
         logs: logs
       }),
@@ -97,4 +119,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Game);
+)(SingleModeGame);

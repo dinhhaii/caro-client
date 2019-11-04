@@ -30,7 +30,7 @@ class Home extends Component {
           </div>
         </header> */}
         <div className="d-flex justify-content-around pt-5 pb-5 bg-dark">
-          <Link to="/" className="btn btn-primary">
+          <Link to="/singleplayer" className="btn btn-primary">
             Single
           </Link>
           <Link to="/multiplayer" className="btn btn-danger">

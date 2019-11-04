@@ -1,7 +1,6 @@
 import * as actionTypes from "../actions/actionType";
-
-const WIDTH = 20;
-const HEIGHT = 20;
+import { HEIGHT, WIDTH } from "../utils/constants";
+import { updateState, calculateWinner, findLine } from "./shared/caro-game";
 
 const initialState = {
   history: [
@@ -21,7 +20,7 @@ const reducer = (state = initialState, action) => {
   const currentIndex = state.currentIndex;
 
   switch (action.type) {
-    case actionTypes.CHOOSE_MOVE:
+    case actionTypes.COMPUTER_CHOOSE_MOVE:
       if (!state.isEnded) {
         const history = state.history.slice();
         const currentIndex = state.currentIndex;
@@ -31,12 +30,11 @@ const reducer = (state = initialState, action) => {
         const unselectedLogClassName = "btn-dark";
 
         if (squares[action.index] == null) {
-          action.logs.children[state.currentIndex].classList.remove(
-            selectedLogClassName
-          );
-          action.logs.children[state.currentIndex].classList.add(
-            unselectedLogClassName
-          );
+          const logs = action.logs.children[currentIndex - 2];
+          if (logs) {
+            logs.classList.remove(selectedLogClassName);
+            logs.classList.add(unselectedLogClassName);
+          }
           squares[action.index] = state.xIsNext ? "X" : "O";
 
           state = {
@@ -54,12 +52,52 @@ const reducer = (state = initialState, action) => {
           const line = calculateWinner(squares, action.index);
           if (line) {
             const winnerLine = findLine(squares, action.index, line);
-            state = {
+            return {
               ...state,
               winnerSquares: winnerLine,
               isEnded: true
             };
-            break;
+          }
+        }
+      }
+      break;
+    case actionTypes.CHOOSE_MOVE:
+      if (!state.isEnded) {
+        const history = state.history.slice();
+        const currentIndex = state.currentIndex;
+        const current = history[currentIndex];
+        const squares = current.squares.slice();
+        const selectedLogClassName = "btn-warning";
+        const unselectedLogClassName = "btn-dark";
+
+        if (squares[action.index] == null) {
+          const logs = action.logs.children[currentIndex];
+          if (logs) {
+            logs.classList.remove(selectedLogClassName);
+            logs.classList.add(unselectedLogClassName);
+          }
+          squares[action.index] = state.xIsNext ? "X" : "O";
+
+          state = {
+            ...state,
+            history: history
+              .splice(0, currentIndex + 1)
+              .concat([{ squares: squares }]),
+            positions: state.positions
+              .splice(0, currentIndex + 1)
+              .concat(action.index),
+            currentIndex: currentIndex + 1,
+            xIsNext: !state.xIsNext
+          };
+
+          const line = calculateWinner(squares, action.index);
+          if (line) {
+            const winnerLine = findLine(squares, action.index, line);
+            return {
+              ...state,
+              winnerSquares: winnerLine,
+              isEnded: true
+            };
           }
         }
       }
@@ -125,167 +163,6 @@ const reducer = (state = initialState, action) => {
   }
 
   return state;
-};
-
-const updateState = (i, currentIndex, logs) => {
-  const selectedLogClassName = "btn-warning";
-  const unselectedLogClassName = "btn-dark";
-
-  logs.children[currentIndex].classList.remove(selectedLogClassName);
-  logs.children[currentIndex].classList.add(unselectedLogClassName);
-  logs.children[i].classList.remove(unselectedLogClassName);
-  logs.children[i].classList.add(selectedLogClassName);
-};
-
-// const checkEqualToCurrentIndex = i => {
-//   return state.currentIndex === i;
-// };
-
-const findLine = (squares, index, line) => {
-  var tick = squares[index];
-  var result = Array(WIDTH * HEIGHT).fill(null);
-  result[index] = 1;
-
-  var pos = {
-    index_top_left: index - WIDTH - 1,
-    index_top: index - WIDTH,
-    index_top_right: index - WIDTH + 1,
-    index_bottom_left: index + WIDTH - 1,
-    index_bottom: index + WIDTH,
-    index_bottom_right: index + WIDTH + 1,
-    index_left: index - 1,
-    index_right: index + 1
-  };
-
-  switch (line) {
-    case 1:
-      for (let i = 1; i <= 4; i++) {
-        if (tick === squares[pos.index_top]) {
-          result[pos.index_top] = 1;
-          pos.index_top -= WIDTH;
-        }
-        if (tick === squares[pos.index_bottom]) {
-          result[pos.index_bottom] = 1;
-          pos.index_bottom += WIDTH;
-        }
-      }
-      break;
-    case 2:
-      for (let i = 1; i <= 4; i++) {
-        if (tick === squares[pos.index_left]) {
-          result[pos.index_left] = 1;
-          pos.index_left -= 1;
-        }
-        if (tick === squares[pos.index_right]) {
-          result[pos.index_right] = 1;
-          pos.index_right += 1;
-        }
-      }
-      break;
-    case 3:
-      for (let i = 1; i <= 4; i++) {
-        if (tick === squares[pos.index_top_left]) {
-          result[pos.index_top_left] = 1;
-          pos.index_top_left -= WIDTH + 1;
-        }
-        if (tick === squares[pos.index_bottom_right]) {
-          result[pos.index_bottom_right] = 1;
-          pos.index_bottom_right += WIDTH + 1;
-        }
-      }
-      break;
-    case 4:
-      for (let i = 1; i <= 4; i++) {
-        if (tick === squares[pos.index_top_right]) {
-          result[pos.index_top_right] = 1;
-          pos.index_top_right -= WIDTH - 1;
-        }
-        if (tick === squares[pos.index_bottom_left]) {
-          result[pos.index_bottom_left] = 1;
-          pos.index_bottom_left += WIDTH - 1;
-        }
-      }
-      break;
-    default:
-      break;
-  }
-
-  return result;
-};
-
-const calculateWinner = (squares, last_turn) => {
-  const countMoves = 4;
-  var index = last_turn;
-  var tick = squares[index];
-
-  //Count number of turn
-  var vertical = 0;
-  var horizontal = 0;
-  var left_diagonal = 0;
-  var right_diagonal = 0;
-
-  var pos = {
-    index_top_left: index - WIDTH - 1,
-    index_top: index - WIDTH,
-    index_top_right: index - WIDTH + 1,
-    index_bottom_left: index + WIDTH - 1,
-    index_bottom: index + WIDTH,
-    index_bottom_right: index + WIDTH + 1,
-    index_left: index - 1,
-    index_right: index + 1
-  };
-
-  for (var i = 1; i <= 4; i++) {
-    if (tick === squares[pos.index_top]) {
-      pos.index_top -= WIDTH;
-      horizontal += 1;
-    }
-    if (tick === squares[pos.index_bottom]) {
-      pos.index_bottom += WIDTH;
-      horizontal += 1;
-    }
-
-    if (tick === squares[pos.index_top_right]) {
-      pos.index_top_right -= WIDTH - 1;
-      right_diagonal += 1;
-    }
-    if (tick === squares[pos.index_bottom_left]) {
-      pos.index_bottom_left += WIDTH - 1;
-      right_diagonal += 1;
-    }
-
-    if (tick === squares[pos.index_top_left]) {
-      pos.index_top_left -= WIDTH + 1;
-      left_diagonal += 1;
-    }
-    if (tick === squares[pos.index_bottom_right]) {
-      pos.index_bottom_right += WIDTH + 1;
-      left_diagonal += 1;
-    }
-
-    if (tick === squares[pos.index_left]) {
-      pos.index_left -= 1;
-      vertical += 1;
-    }
-    if (tick === squares[pos.index_right]) {
-      pos.index_right += 1;
-      vertical += 1;
-    }
-
-    switch (countMoves) {
-      case horizontal:
-        return 1;
-      case vertical:
-        return 2;
-      case left_diagonal:
-        return 3;
-      case right_diagonal:
-        return 4;
-      default:
-        break;
-    }
-  }
-  return null;
 };
 
 export default reducer;

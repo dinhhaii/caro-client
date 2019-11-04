@@ -4,6 +4,7 @@ import Register from "../components/Register/Register";
 import Login from "../components/Login/Login";
 import Game from "../components/Game/Game";
 import Home from "../containers/Home";
+import SingleModeGame from "../components/Game/SingleModeGame";
 
 const routes = [
   {
@@ -14,7 +15,7 @@ const routes = [
   {
     path: "/singleplayer",
     exact: false,
-    main: () => <Game />
+    main: () => <SingleModeGame />
   },
   {
     path: "/multiplayer",

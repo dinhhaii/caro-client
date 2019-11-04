@@ -1,9 +1,8 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import Square from "../Square/Square";
-
-const WIDTH = 20;
-const HEIGHT = 20;
+import "./Board.css";
+import { WIDTH, HEIGHT } from "../../utils/constants";
 
 const Board = props => {
   const renderSquare = i => {
@@ -84,11 +83,11 @@ const Board = props => {
           Reset
         </button>
         <div>
-          <h5>Player 1 - X</h5>
-          <h5>Player 2 - O</h5>
+          <h5 className="dh-font">Player 1 - X</h5>
+          <h5 className="dh-font">Player 2 - O</h5>
         </div>
       </div>
-      <h3 className="pb-4">{status}</h3>
+      <h3 className="pb-4 dh-font">{status}</h3>
 
       {createBoardRow()}
     </div>

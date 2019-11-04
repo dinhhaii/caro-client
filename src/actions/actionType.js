@@ -1,3 +1,4 @@
+export const COMPUTER_CHOOSE_MOVE = "COMPUTER_CHOOSE_MOVE";
 export const CHOOSE_MOVE = "CHOOSE_MOVE";
 export const PREVIOUS_TURN = "PREVIOUS_TURN";
 export const NEXT_TURN = "NEXT_TURN";
