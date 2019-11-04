@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Board from "../components/Board/Board";
-import Log from "../components/Log/Log";
+import Board from "../Board/Board";
+import Log from "../Log/Log";
 import { connect } from "react-redux";
-import * as actionTypes from "../actions/actionType";
+import * as actionTypes from "../../actions/actionType";
 
 class Game extends Component {
   render() {

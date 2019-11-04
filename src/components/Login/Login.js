@@ -1,11 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Redirect } from "react-router-dom";
-import { loginUser } from "../../actions/actions";
+import { loginUser, loginGoogleAndFacebook } from "../../actions/actions";
+import queryString from "query-string";
 import * as actionType from "../../actions/actionType";
 import * as constant from "../../utils/constants";
 
 class Login extends Component {
+  componentDidMount() {
+    var query = queryString.parse(this.props.location.search);
+    if (query.token) {
+      this.props.loginGoogleFacebook(query);
+      this.props.history.push("/");
+    }
+  }
+
   onChange = e => {
     var target = e.target;
     var name = target.name;
@@ -74,10 +83,18 @@ class Login extends Component {
                 <button className="login100-form-btn" type="submit">
                   Sign in
                 </button>
-                <button className="login100-form-btn google-btn">Google</button>
-                <button className="login100-form-btn facebook-btn">
+                <a
+                  href={`${constant.API_URL}/user/google`}
+                  className="login100-form-btn google-btn"
+                >
+                  Google
+                </a>
+                <a
+                  href={`${constant.API_URL}/user/facebook`}
+                  className="login100-form-btn facebook-btn"
+                >
                   Facebook
-                </button>
+                </a>
               </div>
 
               <div className="flex-col-c p-t-100 p-b-40">
@@ -105,7 +122,8 @@ const mapDispatchToProps = dispatch => {
   return {
     login: user => dispatch(loginUser(user)),
     setUser: (name, value) =>
-      dispatch({ type: actionType.SET_INFO_USER, name: name, value: value })
+      dispatch({ type: actionType.SET_INFO_USER, name: name, value: value }),
+    loginGoogleFacebook: user => dispatch(loginGoogleAndFacebook(user))
   };
 };
 

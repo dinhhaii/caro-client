@@ -29,7 +29,11 @@ export function registerUser(user) {
       name: name
     })
       .then(res => {
-        dispatch(receiveUser(res.data));
+        const data = res.data;
+        if (!data.username) {
+          dispatch({ type: actionType.RESET_USER });
+        }
+        dispatch(receiveUser(data));
       })
       .catch(err => console.log(err));
   };
@@ -57,25 +61,55 @@ export function loginUser(user) {
 
 export function checkLoginUser(token) {
   return function(dispatch) {
-    // const token = localStorage.getItem(constant.TOKEN_USER);
     const authString = "Bearer ".concat(token);
-    const url = constant.API_URL + "/me";
+    const authUrlLocalStrategy = constant.API_URL.concat("/me");
+    const authUrlGoogleStrategy = constant.OAUTH_GOOGLE.concat(token);
+    const authUrlFacebookStrategy = constant.API_URL.concat(
+      `/auth/facebook?token=${token}`
+    );
     return axios
-      .get(url, {
+      .get(authUrlLocalStrategy, {
         headers: {
           Authorization: authString
         }
       })
-      .then(res => {
-        console.log(res);
-        if (res) {
-          dispatch(receiveUser(res.data));
+      .then(resultLS => {
+        console.log(resultLS);
+        if (resultLS.data) {
+          dispatch(receiveUser(resultLS.data));
           dispatch({ type: actionType.IS_LOGIN_USER });
         }
       })
       .catch(err => {
-        console.log(err);
+        axios
+          .get(authUrlGoogleStrategy)
+          .then(resultGS => {
+            console.log(resultGS);
+            if (resultGS.data) {
+              dispatch(receiveUser(resultGS.data));
+              dispatch({ type: actionType.IS_LOGIN_USER });
+            }
+          })
+          .catch(err => {
+            axios.get(authUrlFacebookStrategy).then(resultFS => {
+              console.log(resultFS.data);
+              if (resultFS.data) {
+                dispatch(receiveUser(resultFS.data));
+                dispatch({ type: actionType.IS_LOGIN_USER });
+              }
+            });
+          });
       });
+  };
+}
+
+export function loginGoogleAndFacebook(user) {
+  return function(dispatch) {
+    if (user) {
+      localStorage.setItem(constant.TOKEN_USER, user.token);
+      dispatch(receiveUser(user));
+      dispatch({ type: actionType.IS_LOGIN_USER });
+    }
   };
 }
 

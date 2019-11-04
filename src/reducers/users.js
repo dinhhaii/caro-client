@@ -27,12 +27,12 @@ const user = (state = initialState, action) => {
     case actionType.REQUEST_USER:
       return { ...state, loading: true };
     case actionType.RECEIVE_USER:
-      console.log(action.user.username);
       return {
         ...state,
         username: action.user.username,
         gender: action.user.gender,
         name: action.user.name,
+        picture: action.user.picture,
         loading: false,
         success: true
       };
