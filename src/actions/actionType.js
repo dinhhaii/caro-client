@@ -19,3 +19,4 @@ export const RECEIVE_DATA = "RECEIVE_DATA";
 
 export const ADD_PARTNER = "ADD_PARTNER";
 export const REMOVE_PARTNER = "REMOVE_PARTNER";
+export const REQUEST_PARTNER = "REQUEST_PARTNER";

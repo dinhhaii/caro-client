@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-// import Menu from "../components/Menu/Menu";
 // import * as actionTypes from "../actions/actionType";
 
 class Home extends Component {

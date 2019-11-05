@@ -8050,6 +8050,11 @@ hr {
   width: 100px;
 }
 
+.dh-btn-findplayer {
+  width: 200px;
+  height: 80px;
+}
+
 .dh-btn-log {
   width: 300px;
 }

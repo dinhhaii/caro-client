@@ -6,7 +6,7 @@ import * as constant from "../../utils/constants";
 import { logoutUser, checkLoginUser } from "../../actions/actions";
 import "./Menu.css";
 class Menu extends Component {
-  componentDidMount() {
+  componentWillMount() {
     const data_user = localStorage.getItem(constant.TOKEN_USER);
     if (data_user) {
       this.props.checkLogin(data_user).catch(err => console.log(err));

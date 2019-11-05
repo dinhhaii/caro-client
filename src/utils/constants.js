@@ -4,3 +4,5 @@ export const API_URL = "http://localhost:3000";
 export const WIDTH = 20;
 export const HEIGHT = 20;
 export const SOCKET_FIND_PARTNER = "SOCKET_FIND_PARTNER";
+export const SOCKET_RESPONSE_PARTNER = "SOCKET_RESPONSE_PARTNER";
+export const SOCKET_CHAT = "SOCKET_CHAT";
