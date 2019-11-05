@@ -36,7 +36,7 @@ class Home extends Component {
           <Link to="/multiplayer" className="btn btn-danger">
             Multiplayer
           </Link>
-          <Link to="/" className="btn btn-info">
+          <Link to="/online" className="btn btn-info">
             Play Online
           </Link>
           <Link to="/" className="btn btn-warning">
