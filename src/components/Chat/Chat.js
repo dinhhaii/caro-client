@@ -1,14 +1,22 @@
 import React, { Component } from "react";
-// import Board from "../Board/Board";
-// import Log from "../Log/Log";
 import { connect } from "react-redux";
-import * as actionTypes from "../../actions/actionType";
+import { sendData, receiveData } from "../../actions/chat-actions";
 import "./Chat.css";
-import socketIOClient from "socket.io-client";
 
-class OnlineModeGame extends Component {
-  componentWillMount() {
-    this.props.resetGame();
+class Chat extends Component {
+  send = data => {
+    this.props.socket.emit("chat", data);
+    this.props.sendData(data);
+  };
+
+  receive = data => {
+    this.props.receiveData(data);
+  };
+
+  componentDidMount() {
+    this.props.socket.on("chat", data => {
+      this.props.receiveData(data);
+    });
   }
 
   render() {
@@ -19,7 +27,7 @@ class OnlineModeGame extends Component {
             <div id="sidepanel">
               <div id="profile">
                 <div className="wrap">
-                  <image
+                  <img
                     id="profile-img"
                     src="http://emilcarlsson.se/assets/mikeross.png"
                     className="online"
@@ -79,7 +87,7 @@ class OnlineModeGame extends Component {
                   <li className="contact">
                     <div className="wrap">
                       <span className="contact-status online"></span>
-                      <image
+                      <img
                         src="http://emilcarlsson.se/assets/louislitt.png"
                         alt=""
                       />
@@ -92,7 +100,7 @@ class OnlineModeGame extends Component {
                   <li className="contact active">
                     <div className="wrap">
                       <span className="contact-status busy"></span>
-                      <image
+                      <img
                         src="http://emilcarlsson.se/assets/harveyspecter.png"
                         alt=""
                       />
@@ -109,7 +117,7 @@ class OnlineModeGame extends Component {
                   <li className="contact">
                     <div className="wrap">
                       <span className="contact-status away"></span>
-                      <image
+                      <img
                         src="http://emilcarlsson.se/assets/rachelzane.png"
                         alt=""
                       />
@@ -125,7 +133,7 @@ class OnlineModeGame extends Component {
                   <li className="contact">
                     <div className="wrap">
                       <span className="contact-status"></span>
-                      <image
+                      <img
                         src="http://emilcarlsson.se/assets/haroldgunderson.png"
                         alt=""
                       />
@@ -138,19 +146,19 @@ class OnlineModeGame extends Component {
                 </ul>
               </div>
               <div id="bottom-bar">
-                <button id="addcontact">
-                  <i className="fa fa-user-plus fa-fw" aria-hidden="true"></i>{" "}
+                <button className="btn" id="addcontact">
+                  <i className="fa fa-user-plus fa-fw" aria-hidden="true"></i>
                   <span>Add contact</span>
                 </button>
-                <button id="settings">
-                  <i className="fa fa-cog fa-fw" aria-hidden="true"></i>{" "}
+                <button className="btn" id="settings">
+                  <i className="fa fa-cog fa-fw" aria-hidden="true"></i>
                   <span>Settings</span>
                 </button>
               </div>
             </div>
             <div className="content">
               <div className="contact-profile">
-                <image
+                <img
                   src="http://emilcarlsson.se/assets/harveyspecter.png"
                   alt=""
                 />
@@ -163,27 +171,17 @@ class OnlineModeGame extends Component {
               </div>
               <div className="messages">
                 <ul>
-                  <li className="sent">
-                    <image
-                      src="http://emilcarlsson.se/assets/mikeross.png"
-                      alt=""
-                    />
-                    <p>
-                      What are you talking about? You do what they say or they
-                      shoot you.
-                    </p>
-                  </li>
-                  <li className="replies">
-                    <image
-                      src="http://emilcarlsson.se/assets/harveyspecter.png"
-                      alt=""
-                    />
-                    <p>
-                      Wrong. You take the gun, or you pull out a bigger one. Or,
-                      you call their bluff. Or, you do any one of a hundred and
-                      forty six other things.
-                    </p>
-                  </li>
+                  {this.props.chatHistory.map((value, index) => {
+                    return (
+                      <li key={index} className={value.target}>
+                        <img
+                          src="http://emilcarlsson.se/assets/mikeross.png"
+                          alt=""
+                        />
+                        <p>{value.content}</p>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
               <div className="message-input">
@@ -193,7 +191,10 @@ class OnlineModeGame extends Component {
                     className="form-control"
                     placeholder="Write your message..."
                   />
-                  <button className="submit btn">
+                  <button
+                    className="submit btn"
+                    onClick={() => this.send("HELLO")}
+                  >
                     <i className="fa fa-paper-plane" aria-hidden="true"></i>
                   </button>
                 </div>
@@ -208,40 +209,19 @@ class OnlineModeGame extends Component {
 
 const mapStateToProps = state => {
   return {
-    history: state.games.history,
-    logMoves: state.games.logMoves,
-    positions: state.games.positions,
-    currentIndex: state.games.currentIndex,
-    xIsNext: state.games.xIsNext,
-    isEnded: state.games.isEnded,
-    winnerSquares: state.games.winnerSquares
+    chatHistory: state.chat.chatHistory,
+    socket: state.sockets.socket
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    chooseMove: (index, logs) =>
-      dispatch({
-        type: actionTypes.CHOOSE_MOVE,
-        index: index,
-        logs: logs
-      }),
-    computerChooseMove: (index, logs) =>
-      dispatch({
-        type: actionTypes.COMPUTER_CHOOSE_MOVE,
-        index: index,
-        logs: logs
-      }),
-    prevTurn: logs => dispatch({ type: actionTypes.PREVIOUS_TURN, logs: logs }),
-    nextTurn: logs => dispatch({ type: actionTypes.NEXT_TURN, logs: logs }),
-    resetGame: () => dispatch({ type: actionTypes.RESET_GAME }),
-    keepStateWinning: () => dispatch({ type: actionTypes.KEEP_STATE_WINNING }),
-    jumpMove: (index, logs) =>
-      dispatch({ type: actionTypes.JUMP_MOVE, index: index, logs: logs })
+    sendData: data => dispatch(sendData(data)),
+    receiveData: data => dispatch(receiveData(data))
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(OnlineModeGame);
+)(Chat);

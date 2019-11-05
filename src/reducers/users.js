@@ -1,5 +1,4 @@
 import * as actionType from "../actions/actionType";
-// import callAPI from "../utils/apiCaller";
 
 const initialState = {
   name: "",

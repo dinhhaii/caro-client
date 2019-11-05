@@ -5,7 +5,7 @@ import Login from "../components/Login/Login";
 import Game from "../components/Game/Game";
 import Home from "../containers/Home";
 import SingleModeGame from "../components/Game/SingleModeGame";
-import Chat from "../components/Chat/Chat";
+import OnlineModeGame from "../components/Game/OnlineModeGame";
 
 const routes = [
   {
@@ -26,7 +26,7 @@ const routes = [
   {
     path: "/online",
     exact: false,
-    main: () => <Chat />
+    main: () => <OnlineModeGame />
   },
   {
     path: "/login",
