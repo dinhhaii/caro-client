@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import Square from "../Square/Square";
+import { connect } from "react-redux";
 import "./Board.css";
 import { WIDTH, HEIGHT } from "../../utils/constants";
 
@@ -39,16 +40,22 @@ const Board = props => {
   };
 
   let status;
-  const currentPlayer = parseInt(props.xIsNext ? 1 : 2);
-  const currentTick = props.xIsNext ? "X" : "O";
+  var currentPlayer = "Player " + parseInt(props.xIsNext ? 1 : 2);
+  var anotherPlayer = "Player " + parseInt(!props.xIsNext ? 1 : 2);
+  var currentTick = props.xIsNext ? "X" : "O";
+  var anotherTick = !props.xIsNext ? "X" : "O";
 
-  const anotherPlayer = parseInt(!props.xIsNext ? 1 : 2);
-  const anotherTick = !props.xIsNext ? "X" : "O";
+  if (props.user) {
+    currentPlayer = props.turn ? "YOU" : props.partner.name;
+  }
+  if (props.partner) {
+    anotherPlayer = !props.turn && props.xIsNext ? "YOU" : props.partner.name;
+  }
 
   const isEndedGame = !props.winnerSquares.every(element => element === null);
 
   if (!props.isEnded) {
-    status = `Player ${currentPlayer}: ${currentTick}`;
+    status = `${currentPlayer}: ${currentTick}`;
   }
 
   return (
@@ -58,7 +65,7 @@ const Board = props => {
           <Modal.Title>Congratulation!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Player {anotherPlayer} ({anotherTick}) is the Winner
+          {anotherPlayer} ({anotherTick}) is the Winner
         </Modal.Body>
         <Modal.Footer>
           <button className="btn btn-primary" onClick={props.resetGame}>
@@ -70,23 +77,33 @@ const Board = props => {
         </Modal.Footer>
       </Modal>
 
-      <div className="d-flex justify-content-around pb-5">
-        <button className="btn btn-info dh-btn" onClick={props.prevTurn}>
-          Previous
-        </button>
+      {props.user && props.partner ? (
+        <div className="d-flex justify-content-around pb-5">
+          <button className="btn btn-info dh-btn-2" onClick={props.prevTurn}>
+            REDO
+          </button>
 
-        <button className="btn btn-info dh-btn" onClick={props.nextTurn}>
-          Next
-        </button>
-
-        <button className="btn btn-danger dh-btn" onClick={props.resetGame}>
-          Reset
-        </button>
-        <div>
-          <h5 className="dh-font">Player 1 - X</h5>
-          <h5 className="dh-font">Player 2 - O</h5>
+          <button className="btn btn-danger dh-btn-2" onClick={props.resetGame}>
+            SURRENDER
+          </button>
         </div>
-      </div>
+      ) : (
+        <div className="d-flex justify-content-around pb-5">
+          <button className="btn btn-info dh-btn" onClick={props.prevTurn}>
+            Previous
+          </button>
+
+          <button className="btn btn-info dh-btn" onClick={props.nextTurn}>
+            Next
+          </button>
+
+          <button className="btn btn-danger dh-btn" onClick={props.resetGame}>
+            Reset
+          </button>
+          <h5 className="dh-font">{`${currentPlayer} - ${currentTick}`}</h5>
+          <h5 className="dh-font">{`${anotherPlayer} - ${anotherTick}`}</h5>
+        </div>
+      )}
       <h3 className="pb-4 dh-font">{status}</h3>
 
       {createBoardRow()}
@@ -94,4 +111,15 @@ const Board = props => {
   );
 };
 
-export default Board;
+const mapStateToProps = state => {
+  return {
+    user: state.users,
+    partner: state.sockets.partner,
+    turn: state.sockets.turn
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Board);

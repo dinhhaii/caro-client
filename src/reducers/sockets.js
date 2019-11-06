@@ -5,7 +5,11 @@ import socketIOClient from "socket.io-client";
 const initialState = {
   socket: socketIOClient(constant.API_URL),
   partner: null,
-  isLoading: false
+  isLoading: false,
+  turn: false,
+  accept: false,
+  redo: false,
+  surrender: false
 };
 
 const socket = (state = initialState, action) => {
@@ -16,6 +20,8 @@ const socket = (state = initialState, action) => {
       return { ...state, partner: null };
     case actionType.REQUEST_PARTNER:
       return { ...state, isLoading: true };
+    case actionType.SET_ACTION:
+      return { ...state, [action.name]: action.value };
     default:
       return state;
   }

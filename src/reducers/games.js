@@ -30,10 +30,14 @@ const reducer = (state = initialState, action) => {
         const unselectedLogClassName = "btn-dark";
 
         if (squares[action.index] == null) {
-          const logs = action.logs.children[currentIndex - 2];
+          const logs = action.logs;
           if (logs) {
-            logs.classList.remove(selectedLogClassName);
-            logs.classList.add(unselectedLogClassName);
+            logs.children[currentIndex - 2].classList.remove(
+              selectedLogClassName
+            );
+            logs.children[currentIndex - 2].classList.add(
+              unselectedLogClassName
+            );
           }
           squares[action.index] = state.xIsNext ? "X" : "O";
 
@@ -71,10 +75,10 @@ const reducer = (state = initialState, action) => {
         const unselectedLogClassName = "btn-dark";
 
         if (squares[action.index] == null) {
-          const logs = action.logs.children[currentIndex];
+          const logs = action.logs;
           if (logs) {
-            logs.classList.remove(selectedLogClassName);
-            logs.classList.add(unselectedLogClassName);
+            logs.children[currentIndex].classList.remove(selectedLogClassName);
+            logs.children[currentIndex].classList.add(unselectedLogClassName);
           }
           squares[action.index] = state.xIsNext ? "X" : "O";
 

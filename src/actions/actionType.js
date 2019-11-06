@@ -14,9 +14,10 @@ export const SET_INFO_USER = "SET_INFO_USER";
 export const IS_LOGIN_USER = "IS_LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
-export const SEND_DATA = "SEND_DATA";
-export const RECEIVE_DATA = "RECEIVE_DATA";
+export const SEND_DATA_MESSAGE = "SEND_DATA_MESSAGE";
+export const RECEIVE_DATA_MESSAGE = "RECEIVE_DATA_MESSAGE";
 
 export const ADD_PARTNER = "ADD_PARTNER";
 export const REMOVE_PARTNER = "REMOVE_PARTNER";
 export const REQUEST_PARTNER = "REQUEST_PARTNER";
+export const SET_ACTION = "SET_ACTION";

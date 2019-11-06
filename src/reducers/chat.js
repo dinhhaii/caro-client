@@ -6,12 +6,12 @@ const initialState = {
 
 const chat = (state = initialState, action) => {
   switch (action.type) {
-    case actionType.SEND_DATA:
+    case actionType.SEND_DATA_MESSAGE:
       return {
         ...state,
         chatHistory: state.chatHistory.concat(action.data)
       };
-    case actionType.RECEIVE_DATA:
+    case actionType.RECEIVE_DATA_MESSAGE:
       return {
         ...state,
         chatHistory: state.chatHistory.concat(action.data)

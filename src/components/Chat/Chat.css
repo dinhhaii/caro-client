@@ -600,6 +600,7 @@
 }
 #frame .content .contact-profile p {
   float: left;
+  margin: 10px 0 0 5px;
 }
 #frame .content .contact-profile .social-media {
   float: right;
