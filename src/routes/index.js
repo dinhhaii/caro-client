@@ -6,12 +6,18 @@ import Game from "../components/Game/Game";
 import Home from "../containers/Home";
 import SingleModeGame from "../components/Game/SingleModeGame";
 import OnlineModeGame from "../components/Game/OnlineModeGame";
+import Profile from "../components/Profile/Profile";
 
 const routes = [
   {
     path: "/",
     exact: true,
     main: () => <Home />
+  },
+  {
+    path: "/profile",
+    exact: true,
+    main: () => <Profile />
   },
   {
     path: "/singleplayer",

@@ -45,7 +45,7 @@ const Board = props => {
   var currentTick = props.xIsNext ? "X" : "O";
   var anotherTick = !props.xIsNext ? "X" : "O";
 
-  if (props.user) {
+  if (props.user && props.partner) {
     currentPlayer = props.turn ? "YOU" : props.partner.name;
   }
   if (props.partner) {

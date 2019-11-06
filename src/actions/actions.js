@@ -122,3 +122,25 @@ export function logoutUser() {
     dispatch({ type: actionType.RESET_USER });
   };
 }
+
+export function updateUser(user) {
+  return function(dispatch) {
+    dispatch(requestUser());
+    var { username, password, name, type, picture } = user;
+    return callAPI("/user/update", "POST", {
+      username: username,
+      password: password,
+      picture: picture,
+      gender: "male",
+      name: name,
+      type: type
+    })
+      .then(res => {
+        const data = res.data;
+        if (res) {
+          dispatch(receiveUser(data));
+        }
+      })
+      .catch(err => console.log(err));
+  };
+}
