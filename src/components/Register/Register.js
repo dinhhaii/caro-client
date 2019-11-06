@@ -138,18 +138,18 @@ class Register extends Component {
                   Register
                 </button>
                 <hr></hr>
-                <button
+                <a
+                  href={`${constant.API_URL}/user/google`}
                   className="login100-form-btn google-btn"
-                  disabled={this.props.loading}
                 >
                   Google
-                </button>
-                <button
+                </a>
+                <a
+                  href={`${constant.API_URL}/user/facebook`}
                   className="login100-form-btn facebook-btn"
-                  disabled={this.props.loading}
                 >
                   Facebook
-                </button>
+                </a>
               </div>
             </form>
           </div>

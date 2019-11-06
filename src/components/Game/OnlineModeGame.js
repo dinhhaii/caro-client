@@ -204,7 +204,7 @@ class OnlineModeGame extends Component {
                   </div>
                 </div>
 
-                {/* <div className="col-5">
+                <div className="col-5">
                   <div
                     className="d-flex justify-content-start flex-column dh-log-container"
                     ref="logs"
@@ -213,7 +213,7 @@ class OnlineModeGame extends Component {
                       return this.renderLog(index);
                     })}
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
             <Chat></Chat>
