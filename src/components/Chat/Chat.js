@@ -5,23 +5,29 @@ import * as constant from "../../utils/constants";
 import "./Chat.css";
 
 class Chat extends Component {
-  content = "";
+  constructor() {
+    super();
+    this.state = {
+      content: ""
+    };
+  }
 
   sendMessage = () => {
     const data = {
       partner: this.props.partner,
       messages: {
         target: "send",
-        content: this.content
+        content: this.state.content
       }
     };
-    console.log(data);
     this.props.sendData(data.messages);
     this.props.socket.emit(constant.SOCKET_CHAT, data);
   };
 
   handleChange = event => {
-    this.content = event.target.value;
+    this.setState({
+      content: event.target.value
+    });
   };
 
   componentDidMount() {
@@ -199,7 +205,11 @@ class Chat extends Component {
                 onChange={this.handleChange}
                 placeholder="Write your message..."
               />
-              <button className="submit btn" onClick={this.sendMessage}>
+              <button
+                type="submit"
+                className="submit btn"
+                onClick={this.sendMessage}
+              >
                 <i className="fa fa-paper-plane" aria-hidden="true"></i>
               </button>
             </div>

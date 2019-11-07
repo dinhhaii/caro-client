@@ -9,19 +9,30 @@ import * as actionType from "../../actions/actionType";
 import * as constant from "../../utils/constants";
 
 class Register extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: "",
+      password: "",
+      gender: "",
+      name: ""
+    };
+  }
   onChange = e => {
     var target = e.target;
     var name = target.name;
     var value = target.value;
     if (value !== "") {
-      this.props.setUser(name, value);
+      this.setState({
+        [name]: value
+      });
     }
   };
 
   onSubmit = e => {
     e.preventDefault();
-    var user = this.props;
-    this.props.register(user);
+    var user = this.state;
+    this.props.registerUser(user);
   };
 
   render() {
@@ -173,7 +184,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    register: user => dispatch(registerUser(user)),
+    registerUser: user => dispatch(registerUser(user)),
     resetUser: () => dispatch({ type: actionType.RESET_USER }),
     setUser: (name, value) =>
       dispatch({ type: actionType.SET_INFO_USER, name: name, value: value })

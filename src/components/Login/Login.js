@@ -7,6 +7,14 @@ import * as actionType from "../../actions/actionType";
 import * as constant from "../../utils/constants";
 
 class Login extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: "",
+      password: ""
+    };
+  }
+
   componentDidMount() {
     var query = queryString.parse(this.props.location.search);
     if (query.token) {
@@ -20,14 +28,16 @@ class Login extends Component {
     var name = target.name;
     var value = target.value;
     if (value !== "") {
-      this.props.setUser(name, value);
+      this.setState({
+        [name]: value
+      });
     }
   };
 
   onSubmit = e => {
     e.preventDefault();
-    var user = this.props;
-    this.props.login(user);
+    const user = this.state;
+    this.props.loginUser(user);
     this.props.history.push("/");
   };
 
@@ -120,7 +130,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: user => dispatch(loginUser(user)),
+    loginUser: user => dispatch(loginUser(user)),
     setUser: (name, value) =>
       dispatch({ type: actionType.SET_INFO_USER, name: name, value: value }),
     loginGoogleFacebook: user => dispatch(loginGoogleAndFacebook(user))

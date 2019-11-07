@@ -33,6 +33,7 @@ const user = (state = initialState, action) => {
         gender: action.user.gender,
         name: action.user.name,
         picture: action.user.picture,
+        type: action.user.type,
         loading: false,
         success: true
       };
