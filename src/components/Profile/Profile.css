@@ -1,3 +1,10 @@
 .dh-font-color {
   color: white;
+  font-family: inherit;
+}
+
+.dh-picture {
+  margin: 0 auto;
+  height: 200px;
+  width: 200px;
 }

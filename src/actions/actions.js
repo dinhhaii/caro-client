@@ -74,7 +74,6 @@ export function checkLoginUser(token) {
         }
       })
       .then(resultLS => {
-        console.log(resultLS);
         if (resultLS.data) {
           dispatch(receiveUser(resultLS.data));
           dispatch({ type: actionType.IS_LOGIN_USER });

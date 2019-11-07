@@ -15,17 +15,18 @@ const initialState = {
 const user = (state = initialState, action) => {
   switch (action.type) {
     case actionType.GET_USER:
-      var { username, password, gender, name } = action.user;
+      var { username, password, gender, name, type } = action.user;
       return {
         ...state,
         loading: false,
         username: username,
         password: password,
         gender: gender,
-        name: name
+        name: name,
+        type: type
       };
     case actionType.REQUEST_USER:
-      return { ...state, loading: true };
+      return { ...state, loading: true, success: false };
     case actionType.RECEIVE_USER:
       return {
         ...state,

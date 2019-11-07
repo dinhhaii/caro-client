@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import { ProgressBar } from "react-bootstrap";
 import * as actionType from "../../actions/actionType";
 import { checkLoginUser } from "../../actions/actions";
@@ -22,22 +23,27 @@ class Profile extends Component {
       username: "",
       name: "",
       password: "",
+      picture: "",
       gender: "",
       type: "",
-      progress: 0
+      progress: 0,
+      isLoading: false,
+      constructor: false
     };
   }
 
-  updateInfo = () => {
+  updateImage = () => {
     const image = this.fileUpload.files[0];
     if (image != null) {
       const uploadTask = storage.ref(`images/${image.name}`).put(image);
       uploadTask.on(
         "state_changed",
         snapshot => {
-          var progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          var progress = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
           this.setState({
+            isLoading: true,
             progress: progress
           });
         },
@@ -50,11 +56,10 @@ class Profile extends Component {
             .child(image.name)
             .getDownloadURL()
             .then(url => {
-              const user = {
-                ...this.state,
+              this.setState({
+                isLoading: false,
                 picture: url
-              };
-              console.log("UPLOAD IMAGE ", user);
+              });
             });
         }
       );
@@ -65,7 +70,10 @@ class Profile extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
-    if (value !== "") {
+
+    if (name === "picture") {
+      this.updateImage();
+    } else {
       this.setState({
         [name]: value
       });
@@ -74,14 +82,52 @@ class Profile extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    this.updateInfo();
+    const user = this.state;
+    this.props.updateUser(user);
+    if (!this.props.user.isLoading) {
+      this.props.history.push("/");
+    }
   };
 
+  initState = () => {
+    if (this.state.constructor === false) {
+      this.setState({
+        username: this.props.user.username,
+        name: this.props.user.name,
+        password: this.props.user.password,
+        picture: this.props.user.picture,
+        gender: this.props.user.gender,
+        type: this.props.user.type,
+        progress: 0,
+        isLoading: false,
+        constructor: true
+      });
+    }
+  };
+
+  componentWillUpdate() {
+    this.initState();
+  }
+
   render() {
-    const { username, name, password, picture, type } = this.props.user;
+    const { username, name, type, picture } = this.state;
     return (
-      <div className="container">
+      <div className="container" style={{ width: "50%" }}>
+        <div className="d-block mt-5">
+          <h2 className="dh-font-color text-center">Persional Info</h2>
+        </div>
         <form className="mt-5" onSubmit={this.onSubmit}>
+          <div className="form-group">
+            <label className="dh-font-color">Username</label>
+            <input
+              className="form-control"
+              name="username"
+              type="text"
+              value={username}
+              onChange={this.handleChange}
+              disabled
+            ></input>
+          </div>
           <div className="form-group">
             <label className="dh-font-color">Name</label>
             <input
@@ -90,9 +136,10 @@ class Profile extends Component {
               type="text"
               value={name}
               onChange={this.handleChange}
+              disabled={this.state.isLoading}
             ></input>
           </div>
-          {type === "facebook" || type === "google" ? (
+          {type === "local" ? (
             <div className="form-group">
               <label className="dh-font-color">New password</label>
               <input
@@ -100,11 +147,12 @@ class Profile extends Component {
                 name="password"
                 type="password"
                 onChange={this.handleChange}
+                disabled={this.state.isLoading}
               ></input>
             </div>
           ) : null}
-          <div className="form-group">
-            <img src={this.props.picture} alt=""></img>
+          <div className="form-group d-flex flex-column">
+            <img className="dh-picture mb-2 mt-4" src={picture} alt=""></img>
             <ProgressBar
               now={this.state.progress}
               label={`${this.state.progress}%`}
@@ -115,11 +163,18 @@ class Profile extends Component {
               className="form-control"
               onChange={this.handleChange}
               ref={ref => (this.fileUpload = ref)}
+              disabled={this.state.isLoading}
             ></input>
           </div>
-          <button className="btn btn-primary" type="submit">
-            SAVE
-          </button>
+          <div className="mt-5 d-flex justify-content-center">
+            <button
+              className="btn btn-primary dh-btn-2 justify-content-center"
+              type="submit"
+            >
+              SAVE
+              <i className="ml-2 fa fa-check"></i>
+            </button>
+          </div>
         </form>
       </div>
     );
@@ -145,4 +200,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Profile);
+)(withRouter(Profile));

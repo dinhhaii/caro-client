@@ -33,9 +33,9 @@ class Menu extends Component {
                 alt={picture}
               ></img>
               <NavDropdown title={name} id="basic-nav-dropdown">
-                <NavDropdown.Item>
-                  <Link to="/profile">Profile</Link>
-                </NavDropdown.Item>
+                <Link className="ml-3" to="/profile">
+                  Profile
+                </Link>
                 <NavDropdown.Divider />
                 <NavDropdown.Item onClick={this.props.logout}>
                   <i className="fa fa-power-off"></i> Sign out
